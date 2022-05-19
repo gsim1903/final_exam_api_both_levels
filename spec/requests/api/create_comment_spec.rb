@@ -1,20 +1,22 @@
 RSpec.describe 'GET /api/articles/:id', type: :request do
+  let(:user) { create(:user) }
   let!(:article) { create(:article) }
   let(:comment) { create(:comment) }
+  let(:member_credentials) { user.create_new_auth_token }
 
   subject { repsonse }
 
-  describe 'Article can have a comment added' do
+  describe 'Succesfull - article can have a comment by an authenticatd user' do
     before do
       post "/api/articles/#{article.id}/comments", params: {
-        comment: { article: article.id, comment_id: comment.id }
-      }
+        comment: { article: article.id,
+                   comment_id: comment.id }
+      }, headers: member_credentials
       @article = Article.last
     end
 
     it 'is expected to return a 201 response' do
       expect(response).to have_http_status 201
-      binding.pry
     end
 
     it 'is expected to return the article with the comment ' do
@@ -26,7 +28,22 @@ RSpec.describe 'GET /api/articles/:id', type: :request do
     end
 
     it 'it is expected an articles will include a comment' do
-      expect(comment['body']).to eq "article comment"
+      expect(comment['body']).to eq 'article comment'
     end
+  end
+end
+
+describe 'Unsucesful no comment by an unauthenticatd user' do
+  let!(:article) { create(:article) }
+  let(:comment) { create(:comment) }
+  before do
+    post "/api/articles/#{article.id}/comments", params: {
+      comment: { article: article.id,
+                 comment_id: comment.id }
+    }
+  end
+
+  it 'is expected to return a 401 response' do
+    expect(response).to have_http_status 401
   end
 end
