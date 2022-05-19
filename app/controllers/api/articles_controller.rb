@@ -4,6 +4,11 @@ class Api::ArticlesController < ApplicationController
     render json: { articles: articles }
   end
 
+  def create
+   
+
+  end
+
   def show
     article = Article.find(params[:id])
     render json: { article: article }
