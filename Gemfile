@@ -16,6 +16,7 @@ gem 'devise_token_auth'
 group :development, :test do
   gem 'pry-rails'
   gem 'pry-byebug'
+  gem 'faker'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'factory_bot_rails'

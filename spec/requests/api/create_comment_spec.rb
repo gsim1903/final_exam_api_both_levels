@@ -1,5 +1,7 @@
+require 'faker'
+
 RSpec.describe 'GET /api/articles/:id', type: :request do
-  let(:user) { create(:user) }
+  let!(:user) { create(:user, email: Faker::Internet.email) }
   let!(:article) { create(:article) }
   let(:comment) { create(:comment) }
   let(:member_credentials) { user.create_new_auth_token }
